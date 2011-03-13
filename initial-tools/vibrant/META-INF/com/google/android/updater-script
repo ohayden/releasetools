@@ -159,6 +159,12 @@ set_perm(0, 0, 0777, "/tmp/efsrestore.sh");
 run_program("/tmp/efsrestore.sh", "restore");
 # END: restore efs
 
+# START: flash kernel
+assert(package_extract_file("zImage", "/tmp/boot.img"),
+       write_raw_image("/tmp/boot.img", "boot"),
+       delete("/tmp/boot.img"));
+# END: flash kernel
+
 unmount("/system");
 unmount("/efs");
 ui_print("Done.");
