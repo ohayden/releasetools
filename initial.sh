@@ -18,12 +18,12 @@ then
 	cp -R initial-tools/$PRODUCT/* temp/
 
 	echo "Copying zImage ..."
-	cp ../device/samsung/$PRODUCT/zImage temp/zImage
+	cp $OUTDIR/kernel_build/arch/arm/boot/zImage temp/zImage
 
 	echo "Copying kernel modules ..."
-	cp -R ../device/samsung/$PRODUCT/bcm4329.ko temp/system/modules/
-	cp -R ../device/samsung/$PRODUCT/tun.ko temp/system/modules/
-	cp -R ../device/samsung/$PRODUCT/cifs.ko temp/system/modules/
+	cp -R $OUTDIR/kernel_build/drivers/net/wireless/bcm4329/bcm4329.ko temp/system/modules/
+	cp -R $OUTDIR/kernel_build/drivers/net/tun.ko temp/system/modules/
+	cp -R $OUTDIR/kernel_build/fs/cifs/cifs.ko temp/system/modules/
 
 	echo "Removing .git files"
 	find temp/ -name '.git' -exec rm -r {} \;
@@ -36,11 +36,17 @@ then
 	echo "Signing otapackage ..."
 	java -jar SignApk/signapk.jar SignApk/certificate.pem SignApk/key.pk8 $OUTDIR/cm7-$PRODUCT-initial-unsigned.zip $OUTDIR/cm7-$PRODUCT-initial-$NOW.zip
 
+	echo "Creating initial kernel archive for odin ..."
+	pushd $OUTDIR/kernel_build/arch/arm/boot
+	tar -cvf ../../../../cm7-$PRODUCT-initial-kernel.tar zImage
+	popd
+
 	rm $OUTDIR/cm7-$PRODUCT-initial-unsigned.zip
 	rm -rf temp/
-	echo "cm7-$PRODUCT-initial-$NOW.zip is at $OUTDIR"
-	echo "Done."
 
+	echo "cm7-$PRODUCT-initial-$NOW.zip is at $OUTDIR"
+	echo "cm7-$PRODUCT-initial-kernel.tar is at $OUTDIR"
+	echo "Done."
 else
 	echo "Usage: $0 DEVICE"
 	echo "Example: ./initial.sh galaxys"
