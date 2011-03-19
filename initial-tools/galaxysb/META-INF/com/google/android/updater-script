@@ -2,7 +2,7 @@ ui_print("Welcome to CyanogenMod-7.0.0-GalaxyS");
 
 # START: format
 show_progress(0.200000, 20);
-ui_print("Formating partitions...");
+ui_print("Formatting partitions...");
 
 format("yaffs2", "MTD", "system");
 mount("yaffs2", "MTD", "system", "/system");

@@ -2,7 +2,7 @@ ui_print("GalaxyS Radio Updater");
 
 # START: format radio
 show_progress(0.500000, 5);
-ui_print("Formating radio partition...");
+ui_print("Formatting radio partition...");
 format("yaffs2", "MTD", "radio");
 # END: format radio
 
